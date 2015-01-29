@@ -9,7 +9,9 @@
 import SpriteKit
 
 class GameScene: SKScene {
-    let playerSprite = SKSpriteNode(imageNamed: "Spaceship")
+    let playerSprite        = SKSpriteNode(imageNamed: "Spaceship")
+    let trajectoryShape     = SKShapeNode()
+    
     var mouseDownLocation: CGPoint?
     
     
@@ -36,6 +38,10 @@ class GameScene: SKScene {
         
         sneeze()
         
+        // Initialize trajectory shape
+        let pathCurve = NSBezierPath()
+        pathCurve.moveToPoint(NSPoint(x: 0,y: 0))
+        
     }
     
     override func update(currentTime: CFTimeInterval) {
@@ -49,6 +55,12 @@ class GameScene: SKScene {
                                        sneezeSpeed * +cos(playerSprite.zRotation))
         
         playerSprite.physicsBody?.velocity = newVelocity
+
+        // Draw trajectory
+        let flyingTime = max(0, newVelocity.dy / -self.physicsWorld.gravity.dy)
+        let sameHeightReintersectX = flyingTime * newVelocity.dx
+        
+        
     }
     
     override func mouseDown(theEvent: NSEvent) {
