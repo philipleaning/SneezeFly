@@ -48,7 +48,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         self.addChild(playerSprite)
         
         // Add physics environment
-        self.physicsWorld.gravity = CGVectorMake(0.0, 0.0)
+        self.physicsWorld.gravity = CGVectorMake(0.0, -3.0)
         
         // Initialize trajectory shape
         let pathCurve = NSBezierPath()
@@ -66,7 +66,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     func sneeze() {
-        let sneezeSpeed: CGFloat = 100.0
+        let sneezeSpeed: CGFloat = 500.0
         
         let newVelocity = CGVectorMake(sneezeSpeed * -sin(playerSprite.zRotation) + (playerSprite.physicsBody?.velocity.dx)!,
                                        sneezeSpeed * +cos(playerSprite.zRotation))
