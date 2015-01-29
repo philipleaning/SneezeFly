@@ -29,14 +29,12 @@ class GameScene: SKScene {
         
         // Add physics body to sprite
         playerSprite.physicsBody            = SKPhysicsBody(circleOfRadius: playerSprite.size.width/2.0)
-        playerSprite.physicsBody?.dynamic   = true
+        playerSprite.physicsBody?.dynamic   = false
         
         self.addChild(playerSprite)
         
         // Add physics environment
         self.physicsWorld.gravity = CGVectorMake(0.0, -3.0)
-        
-        sneeze()
         
         // Initialize trajectory shape
         let pathCurve = NSBezierPath()
@@ -77,6 +75,9 @@ class GameScene: SKScene {
     }
     
     override func mouseUp(theEvent: NSEvent) {
+        // Turn physics for player on
+        playerSprite.physicsBody?.dynamic   = true
+
         sneeze()
         mouseDownLocation = nil
     }
