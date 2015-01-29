@@ -9,32 +9,70 @@
 import SpriteKit
 
 class GameScene: SKScene {
+    let hudNode = SKNode()
     let playerSprite        = SKSpriteNode(imageNamed: "Spaceship")
     let trajectoryShape     = SKShapeNode()
+    let resetLabel = SKLabelNode(fontNamed:"Helvetica")
     
     var mouseDownLocation: CGPoint?
     
     
     override func didMoveToView(view: SKView) {
         /* Setup your scene here */
-        /*
         let myLabel = SKLabelNode(fontNamed:"Chalkduster")
         myLabel.text = "Sneeze Fly";
         myLabel.fontSize = 65;
         myLabel.position = CGPoint(x:CGRectGetMidX(self.frame), y:CGRectGetMidY(self.frame) * 1.5);
         self.addChild(myLabel)
-        */
         
-        let sprite = SKSpriteNode(imageNamed:"Spaceship")
-        sprite.position = CGPoint(x: view.bounds.width/2.0, y: view.bounds.height/2.0)
-        sprite.setScale(0.5)
-        self.addChild(sprite)
+        // Add HUD node
+        self.addChild(hudNode)
+        // Add reset label to HUD
+        resetLabel.text = "Reset";
+        resetLabel.fontSize = 65;
+        resetLabel.position = CGPoint(x: self.frame.width - 100, y:self.frame.height - 60);
+        self.addChild(resetLabel)
+
+        // Initialise player sprite
+        playerSprite.position = CGPoint(x: CGRectGetMidX(self.frame), y: CGRectGetMidY(self.frame) * 0.5)
+        playerSprite.setScale(0.5)
+        
+        // Add physics body to sprite
+        playerSprite.physicsBody            = SKPhysicsBody(circleOfRadius: playerSprite.size.width/2.0)
+        playerSprite.physicsBody?.dynamic   = false
+        
+        self.addChild(playerSprite)
+        
+        // Add physics environment
+        self.physicsWorld.gravity = CGVectorMake(0.0, -3.0)
+        
+        // Initialize trajectory shape
+        let pathCurve = NSBezierPath()
+        pathCurve.moveToPoint(NSPoint(x: 0,y: 0))
+        
+    }
+    
+    override func update(currentTime: CFTimeInterval) {
+        /* Called before each frame is rendered */
+    }
+    
+    func sneeze() {
+        let sneezeSpeed: CGFloat = 500.0
+        
+        let newVelocity = CGVectorMake(sneezeSpeed * -sin(playerSprite.zRotation) + (playerSprite.physicsBody?.velocity.dx)!,
+                                       sneezeSpeed * +cos(playerSprite.zRotation))
+        
+        playerSprite.physicsBody?.velocity = newVelocity
+
+        // Draw trajectory
+        let flyingTime = max(0, newVelocity.dy / -self.physicsWorld.gravity.dy)
+        let sameHeightReintersectX = flyingTime * newVelocity.dx
+        
+        
     }
     
     override func mouseDown(theEvent: NSEvent) {
-        /* Called when a mouse click occurs */
-        
-        let location = theEvent.locationInNode(self)
+        mouseDownLocation = theEvent.locationInNode(self)
     }
     
     override func mouseDragged(theEvent: NSEvent) {
@@ -52,5 +90,12 @@ class GameScene: SKScene {
 
         sneeze()
         mouseDownLocation = nil
+        
+        if resetLabel.containsPoint(theEvent.locationInNode(self)) {
+            playerSprite.position = CGPoint(x: CGRectGetMidX(self.frame), y: CGRectGetMidY(self.frame) * 0.5)
+            playerSprite.zRotation = 0
+            playerSprite.physicsBody?.dynamic = false
+            playerSprite.physicsBody?.velocity = CGVectorMake(0, 0)
+        }
     }
 }

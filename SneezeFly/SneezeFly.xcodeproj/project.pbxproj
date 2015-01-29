@@ -401,6 +401,7 @@
 				51220FC41A7AA1800049A341 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		51220FC51A7AA1800049A341 /* Build configuration list for PBXNativeTarget "SneezeFlyTests" */ = {
 			isa = XCConfigurationList;
@@ -409,6 +410,7 @@
 				51220FC71A7AA1800049A341 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
