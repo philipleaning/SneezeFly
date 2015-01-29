@@ -9,7 +9,9 @@
 import SpriteKit
 
 class GameScene: SKScene {
-    let playerSprite = SKSpriteNode(imageNamed: "Spaceship")
+    let playerSprite        = SKSpriteNode(imageNamed: "Spaceship")
+    let trajectoryShape     = SKShapeNode()
+    
     var mouseDownLocation: CGPoint?
     
     
