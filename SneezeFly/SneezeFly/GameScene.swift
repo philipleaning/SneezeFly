@@ -47,6 +47,9 @@ class GameScene: SKScene {
     }
     
     override func mouseUp(theEvent: NSEvent) {
+        // Turn physics for player on
+        playerSprite.physicsBody?.dynamic   = true
+
         sneeze()
         mouseDownLocation = nil
     }
