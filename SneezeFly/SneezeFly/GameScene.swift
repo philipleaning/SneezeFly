@@ -36,7 +36,6 @@ class GameScene: SKScene {
     }
     
     override func mouseDragged(theEvent: NSEvent) {
-        println("dragged")
         if let startLocation = mouseDownLocation {
             let shipDirectionVector = CGVectorMake( theEvent.locationInNode(self).x - startLocation.x,
                                                     theEvent.locationInNode(self).y - startLocation.y)
