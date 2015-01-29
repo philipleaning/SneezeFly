@@ -43,27 +43,19 @@ class GameScene: SKScene {
     }
     
     func sneeze() {
-        playerSprite.physicsBody?.velocity.dy = 0
+        let sneezeSpeed: CGFloat = 500.0
         
-        let sneezeMagnitude: CGFloat = 500.0
-        let sneezeVector             = CGVectorMake(sneezeMagnitude * -sin(playerSprite.zRotation),
-                                                    sneezeMagnitude * +cos(playerSprite.zRotation))
-        playerSprite.physicsBody?.applyImpulse(sneezeVector)
+        let newVelocity = CGVectorMake(sneezeSpeed * -sin(playerSprite.zRotation) + (playerSprite.physicsBody?.velocity.dx)!,
+                                       sneezeSpeed * +cos(playerSprite.zRotation))
+        
+        playerSprite.physicsBody?.velocity = newVelocity
     }
     
     override func mouseDown(theEvent: NSEvent) {
-        /* Called when a mouse click occurs */
-        
         mouseDownLocation = theEvent.locationInNode(self)
-        
-        
-        //        let action = SKAction.rotateByAngle(CGFloat(M_PI), duration:1)
-        //        sprite.runAction(SKAction.repeatActionForever(action))
-        
     }
     
     override func mouseDragged(theEvent: NSEvent) {
-        println("dragged")
         if let startLocation = mouseDownLocation {
             let shipDirectionVector = CGVectorMake( theEvent.locationInNode(self).x - startLocation.x,
                                                     theEvent.locationInNode(self).y - startLocation.y)
