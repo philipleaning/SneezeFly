@@ -108,6 +108,21 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         self.addChild(starNode)
     }
+    
+    func resetGame() {
+        // Move player to starting position and velocity
+        playerSprite.position = CGPoint(x: CGRectGetMidX(self.frame), y: CGRectGetMidY(self.frame) * 0.5)
+        playerSprite.zRotation = 0
+        playerSprite.physicsBody?.dynamic = false
+        playerSprite.physicsBody?.velocity = CGVectorMake(0, 0)
+        
+        // Hide cursor
+        hideCursor()
+        moveCursorToCenter(onlyIfCursorHidden: false)
+        
+        CGAssociateMouseAndMouseCursorPosition(0) // false
+        
+    }
 
     func didBeginContact(contact: SKPhysicsContact) {
         if contact.bodyA.node?.name == "STAR_NODE" {
@@ -124,20 +139,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     override func mouseUp(theEvent: NSEvent) {
         
         if resetLabel.containsPoint(theEvent.locationInNode(self)) {
-            // Move player to starting position and velocity
-            playerSprite.position = CGPoint(x: CGRectGetMidX(self.frame), y: CGRectGetMidY(self.frame) * 0.5)
-            playerSprite.zRotation = 0
-            playerSprite.physicsBody?.dynamic = false
-            playerSprite.physicsBody?.velocity = CGVectorMake(0, 0)
-            
-            // Hide cursor
-            hideCursor()
+            resetGame()
             
             //
             sneezeAllowed = false
         }
         
-        moveCursorToCenter(onlyIfCursorHidden: false)
     }
     
     override func touchesBeganWithEvent(event: NSEvent) {
@@ -222,6 +229,10 @@ extension GameScene {
                     switch character {
                     case Character(" "):
                         showCursor()
+                        CGAssociateMouseAndMouseCursorPosition(1) // true
+                        
+                    case Character("r"):
+                        resetGame()
                     default:
                         break
                     }
