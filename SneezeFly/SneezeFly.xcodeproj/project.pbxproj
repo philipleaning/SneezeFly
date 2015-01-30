@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		5120AD3C1A7ADC0000AC9571 /* Target.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5120AD3B1A7ADC0000AC9571 /* Target.swift */; };
-		5120AD3E1A7AE09100AC9571 /* star.png in Resources */ = {isa = PBXBuildFile; fileRef = 5120AD3D1A7AE09100AC9571 /* star.png */; };
 		5120AD401A7B075700AC9571 /* TouchForwardingSKView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5120AD3F1A7B075700AC9571 /* TouchForwardingSKView.swift */; };
 		51220FAA1A7AA1800049A341 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51220FA91A7AA1800049A341 /* AppDelegate.swift */; };
 		51220FAC1A7AA1800049A341 /* GameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51220FAB1A7AA1800049A341 /* GameScene.swift */; };
@@ -30,7 +29,6 @@
 
 /* Begin PBXFileReference section */
 		5120AD3B1A7ADC0000AC9571 /* Target.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Target.swift; sourceTree = "<group>"; };
-		5120AD3D1A7AE09100AC9571 /* star.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = star.png; sourceTree = "<group>"; };
 		5120AD3F1A7B075700AC9571 /* TouchForwardingSKView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TouchForwardingSKView.swift; sourceTree = "<group>"; };
 		51220FA41A7AA1800049A341 /* SneezeFly.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SneezeFly.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		51220FA81A7AA1800049A341 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -83,7 +81,6 @@
 		51220FA61A7AA1800049A341 /* SneezeFly */ = {
 			isa = PBXGroup;
 			children = (
-				5120AD3D1A7AE09100AC9571 /* star.png */,
 				51220FA91A7AA1800049A341 /* AppDelegate.swift */,
 				51220FAB1A7AA1800049A341 /* GameScene.swift */,
 				51220FAD1A7AA1800049A341 /* GameScene.sks */,
@@ -202,7 +199,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				51220FAE1A7AA1800049A341 /* GameScene.sks in Resources */,
-				5120AD3E1A7AE09100AC9571 /* star.png in Resources */,
 				51220FB01A7AA1800049A341 /* Images.xcassets in Resources */,
 				51220FB31A7AA1800049A341 /* MainMenu.xib in Resources */,
 			);
