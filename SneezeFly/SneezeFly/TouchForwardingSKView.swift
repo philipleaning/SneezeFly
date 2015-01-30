@@ -18,4 +18,8 @@ class TouchableSKView: SKView {
     override func touchesEndedWithEvent(event: NSEvent) {
         self.scene?.touchesEndedWithEvent(event)
     }
+    
+    override func touchesMovedWithEvent(event: NSEvent) {
+        self.scene?.touchesMovedWithEvent(event)
+    }
 }

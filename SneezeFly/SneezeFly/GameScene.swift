@@ -138,13 +138,24 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     override func touchesBeganWithEvent(event: NSEvent) {
         let touches = event.touchesMatchingPhase(.Began, inView: self.view)
         startPoint = (touches.allObjects.first as NSTouch).normalizedPosition
-        print(startPoint)
+
+    }
+    
+    override func touchesMovedWithEvent(event: NSEvent) {
+        let touches = event.touchesMatchingPhase(.Moved, inView: self.view)
+        let endPoint = (touches.allObjects.first as NSTouch).normalizedPosition
+        let directionVector = CGVectorMake(500*(endPoint.x-startPoint.x), 500*(endPoint.y-startPoint.y))
+        let myAngle: CGFloat = CGFloat(M_PI) - CGFloat(atan2(directionVector.dx, directionVector.dy))
+        playerSprite.zRotation = myAngle
     }
     
     override func touchesEndedWithEvent(event: NSEvent) {
         let touches = event.touchesMatchingPhase(.Ended, inView: self.view)
         let endPoint = (touches.allObjects.first as NSTouch).normalizedPosition
-        print(endPoint)
-        playerSprite.physicsBody?.velocity = CGVectorMake(500*(endPoint.x-startPoint.x), 500*(endPoint.y-startPoint.y))
+        let directionVector = CGVectorMake(500*(endPoint.x-startPoint.x), 500*(endPoint.y-startPoint.y))
+        let myAngle: CGFloat = CGFloat(M_PI) - CGFloat(atan2(directionVector.dx, directionVector.dy))
+        playerSprite.zRotation = myAngle
+        sneeze()
+        
     }
 }
