@@ -11,10 +11,16 @@ import CoreGraphics
 
 class GameScene: SKScene, SKPhysicsContactDelegate {
     let hudNode = SKNode()
-    let playerSprite        = SKSpriteNode(imageNamed: "Spaceship")
-    let trajectoryShape     = SKShapeNode()
     let resetLabel = SKLabelNode(fontNamed:"Helvetica")
+    
+    let playerSprite        = SKSpriteNode(imageNamed: "Spaceship")
+    
+    // Curve of projected trajectory
+    let trajectoryShape     = SKShapeNode()
+    
+    // For sneeze
     var startPoint: CGPoint!
+    var sneezeAllowed = false
     
     var mouseDownLocation: CGPoint?
 
@@ -71,6 +77,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     func sneeze() {
+        if !sneezeAllowed {
+            return
+        }
+        
         let sneezeSpeed: CGFloat = 500.0
         
         let newVelocity = CGVectorMake(sneezeSpeed * -sin(playerSprite.zRotation) + (playerSprite.physicsBody?.velocity.dx)!,
@@ -109,24 +119,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     override func mouseDown(theEvent: NSEvent) {
-        mouseDownLocation = theEvent.locationInNode(self)
-    }
-    
-    override func mouseDragged(theEvent: NSEvent) {
-        if let startLocation = mouseDownLocation {
-            let shipDirectionVector = CGVectorMake( theEvent.locationInNode(self).x - startLocation.x,
-                                                    theEvent.locationInNode(self).y - startLocation.y)
-            let myAngle: CGFloat = CGFloat(M_PI) - CGFloat(atan2(shipDirectionVector.dx, shipDirectionVector.dy))
-            playerSprite.zRotation = myAngle
-        }
     }
     
     override func mouseUp(theEvent: NSEvent) {
-        // Turn physics for player on
-        playerSprite.physicsBody?.dynamic   = true
-
-        sneeze()
-        mouseDownLocation = nil
         
         if resetLabel.containsPoint(theEvent.locationInNode(self)) {
             // Move player to starting position and velocity
@@ -136,8 +131,13 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             playerSprite.physicsBody?.velocity = CGVectorMake(0, 0)
             
             // Hide cursor
-            CGDisplayHideCursor(CGMainDisplayID())
+            hideCursor()
+            
+            //
+            sneezeAllowed = false
         }
+        
+        moveCursorToCenter(onlyIfCursorHidden: false)
     }
     
     override func touchesBeganWithEvent(event: NSEvent) {
@@ -155,13 +155,53 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     override func touchesEndedWithEvent(event: NSEvent) {
-        let touches = event.touchesMatchingPhase(.Ended, inView: self.view)
-        let endPoint = (touches.allObjects.first as NSTouch).normalizedPosition
-        let directionVector = CGVectorMake(500*(endPoint.x-startPoint.x), 500*(endPoint.y-startPoint.y))
-        let myAngle: CGFloat = CGFloat(M_PI) - CGFloat(atan2(directionVector.dx, directionVector.dy))
-        playerSprite.zRotation = myAngle
-        sneeze()
+        // If just pressed "Reset" button
+        if sneezeAllowed {
+            // Turn physics for player on if cursor is hidden
+            playerSprite.physicsBody?.dynamic   = true
+            
+            let touches = event.touchesMatchingPhase(.Ended, inView: self.view)
+            let endPoint = (touches.allObjects.first as NSTouch).normalizedPosition
+            let directionVector = CGVectorMake(500*(endPoint.x-startPoint.x), 500*(endPoint.y-startPoint.y))
+            let myAngle: CGFloat = CGFloat(M_PI) - CGFloat(atan2(directionVector.dx, directionVector.dy))
+            playerSprite.zRotation = myAngle
+            
+            sneeze()
+        }
         
+        // Next release will fire
+        sneezeAllowed = true
+        
+        moveCursorToCenter(onlyIfCursorHidden: true)
+    }
+    
+    // Cursor hiding
+    var cursorHidden = false
+    
+    func hideCursor() {
+        CGDisplayHideCursor(CGMainDisplayID())
+        cursorHidden = true
+    }
+    
+    func showCursor() {
+        CGDisplayShowCursor(CGMainDisplayID())
+        cursorHidden = false
+    }
+    
+    func moveCursorToCenter(#onlyIfCursorHidden: Bool) {
+        if (onlyIfCursorHidden && !cursorHidden) {
+            return
+        }
+        if let myView = self.view {
+            if let myWindow = myView.window {
+                if let myScreen = myWindow.screen {
+                    let frameRelativeToScreen = myWindow.convertRectToScreen(myView.frame)
+                    let screenMaxY = myScreen.frame.maxY
+                    let middleOfScenePoint      = CGPoint(x: CGRectGetMidX(frameRelativeToScreen), y:  screenMaxY - CGRectGetMidY(frameRelativeToScreen))
+                    CGDisplayMoveCursorToPoint(CGMainDisplayID(), middleOfScenePoint)
+                }
+            }
+        }
     }
 }
 
@@ -181,8 +221,7 @@ extension GameScene {
                 for character: Character in characters {
                     switch character {
                     case Character(" "):
-                        println("space")
-                        CGDisplayShowCursor(CGMainDisplayID())
+                        showCursor()
                     default:
                         break
                     }
