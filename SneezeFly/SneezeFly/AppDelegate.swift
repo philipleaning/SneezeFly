@@ -45,6 +45,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             
             self.skView!.showsFPS = true
             self.skView!.showsNodeCount = true
+            
+            // Allow gestures tracking in Scene
+            window.acceptsMouseMovedEvents = true
+            window.makeFirstResponder(skView.scene)
         }
     }
     

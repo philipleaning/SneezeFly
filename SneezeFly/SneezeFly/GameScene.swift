@@ -13,12 +13,16 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     let playerSprite        = SKSpriteNode(imageNamed: "Spaceship")
     let trajectoryShape     = SKShapeNode()
     let resetLabel = SKLabelNode(fontNamed:"Helvetica")
+    var startPoint: CGPoint!
     
     var mouseDownLocation: CGPoint?
-    
-    
+
     override func didMoveToView(view: SKView) {
         self.physicsWorld.contactDelegate = self
+        self.view?.acceptsTouchEvents = true
+        self.view?.wantsRestingTouches = true
+        self.userInteractionEnabled = true
+        
         /* Setup your scene here */
         let myLabel = SKLabelNode(fontNamed:"Chalkduster")
         myLabel.text = "Sneeze Fly";
@@ -33,7 +37,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         resetLabel.fontSize = 65;
         resetLabel.position = CGPoint(x: self.frame.width - 100, y:self.frame.height - 60);
         self.addChild(resetLabel)
-
+        
         // Initialise player sprite
         playerSprite.position = CGPoint(x: CGRectGetMidX(self.frame), y: CGRectGetMidY(self.frame) * 0.5)
         playerSprite.setScale(0.5)
@@ -129,5 +133,18 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             playerSprite.physicsBody?.dynamic = false
             playerSprite.physicsBody?.velocity = CGVectorMake(0, 0)
         }
+    }
+    
+    override func touchesBeganWithEvent(event: NSEvent) {
+        let touches = event.touchesMatchingPhase(.Began, inView: self.view)
+        startPoint = (touches.allObjects.first as NSTouch).normalizedPosition
+        print(startPoint)
+    }
+    
+    override func touchesEndedWithEvent(event: NSEvent) {
+        let touches = event.touchesMatchingPhase(.Ended, inView: self.view)
+        let endPoint = (touches.allObjects.first as NSTouch).normalizedPosition
+        print(endPoint)
+        playerSprite.physicsBody?.velocity = CGVectorMake(500*(endPoint.x-startPoint.x), 500*(endPoint.y-startPoint.y))
     }
 }
