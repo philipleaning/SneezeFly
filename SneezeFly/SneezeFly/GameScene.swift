@@ -7,6 +7,7 @@
 //
 
 import SpriteKit
+import CoreGraphics
 
 class GameScene: SKScene, SKPhysicsContactDelegate {
     let hudNode = SKNode()
@@ -128,10 +129,14 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         mouseDownLocation = nil
         
         if resetLabel.containsPoint(theEvent.locationInNode(self)) {
+            // Move player to starting position and velocity
             playerSprite.position = CGPoint(x: CGRectGetMidX(self.frame), y: CGRectGetMidY(self.frame) * 0.5)
             playerSprite.zRotation = 0
             playerSprite.physicsBody?.dynamic = false
             playerSprite.physicsBody?.velocity = CGVectorMake(0, 0)
+            
+            // Hide cursor
+            CGDisplayHideCursor(CGMainDisplayID())
         }
     }
     
@@ -157,5 +162,32 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         playerSprite.zRotation = myAngle
         sneeze()
         
+    }
+}
+
+// keyboard handling
+extension GameScene {
+    override func keyDown(theEvent: NSEvent) {
+        handleKeyEvent(theEvent: theEvent, keyDown: true)
+    }
+    
+    override func keyUp(theEvent: NSEvent) {
+        handleKeyEvent(theEvent: theEvent, keyDown: false)
+    }
+    
+    func handleKeyEvent(theEvent event: NSEvent, keyDown: Bool) {
+        if !keyDown {
+            if let characters = event.characters {
+                for character: Character in characters {
+                    switch character {
+                    case Character(" "):
+                        println("space")
+                        CGDisplayShowCursor(CGMainDisplayID())
+                    default:
+                        break
+                    }
+                }
+            }
+        }
     }
 }
