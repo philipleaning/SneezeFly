@@ -52,9 +52,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         // Add physics body to sprite
         playerSprite.physicsBody = SKPhysicsBody(texture: SKTexture(imageNamed: "Spaceship"), size: playerSprite.size)
         playerSprite.physicsBody?.dynamic   = false
-        playerSprite.physicsBody?.categoryBitMask = 0
-        playerSprite.physicsBody?.collisionBitMask = 0
-        playerSprite.physicsBody?.contactTestBitMask = 1
+        playerSprite.physicsBody?.categoryBitMask       = NodeBitMask.Player.rawValue
+        playerSprite.physicsBody?.collisionBitMask      = NodeBitMask.Player.rawValue
+        playerSprite.physicsBody?.contactTestBitMask    = NodeBitMask.Star.rawValue
         
         self.addChild(playerSprite)
         
@@ -102,8 +102,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         starNode.setScale(0.25)
         starNode.physicsBody = SKPhysicsBody(texture: SKTexture(imageNamed: "star"), size: starNode.size)
         starNode.physicsBody?.dynamic = false
-        starNode.physicsBody?.collisionBitMask = 0
-        starNode.physicsBody?.categoryBitMask = 1
+        starNode.physicsBody?.collisionBitMask  = NodeBitMask.Player.rawValue
+        starNode.physicsBody?.categoryBitMask   = NodeBitMask.Star.rawValue
         
         
         self.addChild(starNode)
@@ -240,4 +240,10 @@ extension GameScene {
             }
         }
     }
+}
+
+// Collision categories
+enum NodeBitMask: UInt32 {
+    case Player = 1
+    case Star   = 2
 }
